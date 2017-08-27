@@ -5,7 +5,6 @@ Aisdk API клиент для заявок
 
 PHP библиотека для работы с сервисом aisdk с помощью REST API
 
-[![Latest Stable Version](https://poser.pugx.org/gietos/dadata/version)](https://packagist.org/packages/gietos/dadata)
 
 ## Установка
 
