@@ -1,0 +1,25 @@
+{
+  "name": "interso/aisdk-api-order-client",
+  "description": "API client aisdk project)",
+  "minimum-stability": "alpha",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/interso/aisdk-api-order-client/issues",
+    "source": "https://github.com/interso/aisdk-api-order-client"
+  },
+  "authors": [
+    {
+      "name": "Stanislav Vinogradov",
+      "email": "mr.vstas@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "guzzlehttp/guzzle": "6.2.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Aisdk\\": "src/"
+    }
+  }
+}
