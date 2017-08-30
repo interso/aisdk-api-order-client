@@ -22,7 +22,7 @@ class Client
     /**
      * @var string
      */
-    protected $baseUrl = 'http://v2.aisdk.ru/api';
+    protected $baseUrl;
 
     /**
      * @var string
@@ -134,10 +134,9 @@ class Client
     }
 
 
-
     public function getOrders($page = 1)
     {
-        return $this->query($this->prepareUri('orders'), [], self::METHOD_GET);
+        return $this->query($this->prepareUri('orders?page='.$page), [], self::METHOD_GET);
     }
 
 
