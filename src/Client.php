@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionProperty;
 use RuntimeException;
+use GuzzleHttp\Exception\ServerException;
 
 class Client
 {
@@ -75,10 +76,15 @@ class Client
         $params = array('username'=>$username, 'password'=>$password);
 
         $request = new Request(self::METHOD_POST, $uri, $headers , json_encode($params));
+       
+        try {
+            $response = $this->httpClient->send($request, $this->httpOptions);
+        } catch (\Exception $exception) {
+            return false;      
+        }
 
-        $response = $this->httpClient->send($request, $this->httpOptions);
-
-        $result = json_decode($response->getBody(), true);
+        $body = (string) $response->getBody();
+        $result = json_decode($body, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new RuntimeException('Error parsing response: ' . json_last_error_msg());
         }
@@ -121,16 +127,24 @@ class Client
         ];
 
         $request = new Request($method, $uri, $headers, 0 < count($params) ? json_encode($params) : null);
-        $response = $this->httpClient->send($request, $this->httpOptions);
-        
-        $body = $response->getBody();
+ 
+        try {
+            $response = $this->httpClient->send($request, $this->httpOptions);
+        } catch (ServerException $exception) {
+            $responseBody = $exception->getResponse()->getBody(true);
+            $result = ['success'=>false, 'exception'=>$exception, 'body'=>(string)$responseBody];  
+            return $result;
+        } catch (\Exception $exception) {
+            $result = ['success'=>false, 'exception'=>$exception];  
+            return $result;
+        }
 
-        //print $body;
         
+        $body = (string) $response->getBody();
         $result = json_decode($body, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new RuntimeException('Error parsing response: ' . json_last_error_msg());
+            throw new RuntimeException('Error parsing response: ' . json_last_error_msg(). 'Body: '.$body);
         }
         return $result;
     }
