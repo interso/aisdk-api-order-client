@@ -18,6 +18,8 @@ class Client
     const METHOD_GET = 'GET';
     
     const METHOD_POST = 'POST';
+    
+    const METHOD_PUT = 'PUT';
 
     /**
      * @var string
@@ -139,7 +141,6 @@ class Client
         return $this->query($this->prepareUri('orders?page='.$page), [], self::METHOD_GET);
     }
 
-
     public function getOrder($id)
     {
         return $this->query($this->prepareUri('orders/'.$id), [], self::METHOD_GET);
@@ -153,6 +154,19 @@ class Client
     public function getMetaForOrder($id)
     {
         return $this->query($this->prepareUri('orders/'.$id.'/meta'), [], self::METHOD_GET);
+    }
+
+
+    public function createOrder(array $data = [])
+    {
+       $data = ['Orders'=>$data];
+       return $this->query($this->prepareUri('orders'), $data, self::METHOD_POST);
+    }
+   
+    public function updateOrder($id, array $data = [])
+    {
+       $data = ['Orders'=>$data];
+       return $this->query($this->prepareUri('orders/'.$id), $data, self::METHOD_PUT);
     }
 
 
